@@ -1,0 +1,6 @@
+env
+__pycache__
+activate.sh
+env.json
+test_gigamoji.py
+zappa_settings.json
