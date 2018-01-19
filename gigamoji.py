@@ -29,6 +29,9 @@ def challenge_response(data):
 
 def event_callback(data):
     data = request.get_json()
+    retry_num = request.headers.get('X-Slack-Retry-Num')
+    if retry_num and int(retry_num) > 0:
+        return die_noretry(200)
 
     # messageイベントで，かつメッセージの削除・編集等ではないことを確認
     if data["event"]["type"] != "message" or "subtype" in data["event"]:
@@ -57,7 +60,6 @@ def event_callback(data):
     # 絵文字の画像URLを取得
     emoji_list_response = slack_client.api_call("emoji.list")
     emoji_name = emoji_in_text[0].strip(":")
-    print(json.dumps(emoji_list_response))
     emoji_url = emoji_list_response["emoji"].get(emoji_name)
     if emoji_url is None:
         print("emoji url is not set")
