@@ -75,7 +75,7 @@ def event_callback(data):
 
 @app.route("/", methods=['POST'])
 def root():
-    data = request.get_json()
+    data = request.get_json(force=True)
 
     # このリクエストがSlackからきたものかどうかを簡易的に判定
     if ('type' not in data) or ('token' not in data) or (data['token'] != SLACK_VERIFICATION_TOKEN) :
