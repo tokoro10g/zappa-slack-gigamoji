@@ -53,7 +53,7 @@ def event_callback(data):
         return die_noretry(400) # Bad Request
 
     # ユーザのトークンをDynamoDBテーブルから取得
-    response = table.get_item(Key={'TeamUserId': {"S": team_id+user_id}})
+    response = table.get_item(Key={'TeamUserId': team_id+user_id})
     # Slackクライアントを生成
     slack_client = SlackClient(response['Item']["UserToken"])
 
@@ -116,8 +116,8 @@ def auth_callback():
     user_id = response.get("user_id")
 
     # 古いアイテムは消しておく．ユーザトークンをDynamoDBに登録
-    table.delete_item(Key={'TeamUserId': {"S": team_id+user_id}})
-    table.put_item(Item={'TeamUserId': {"S": team_id+user_id}, 'UserToken': {"S": user_token}})
+    table.delete_item(Key={'TeamUserId': team_id+user_id})
+    table.put_item(Item={'TeamUserId': team_id+user_id, 'UserToken': user_token})
 
     return "Gigamojiを<b>%s</b>にインストールしました!!" % (team_name)
 
